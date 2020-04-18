@@ -37,5 +37,8 @@ public class ContractorDetailsEntity {
 	private Boolean accepted_Terms;
 	@Lob
 	private byte[] fileDate;
+	private String fileName;
+	private String fileType;
+	private Contractor_File_status status;
 	
 }
