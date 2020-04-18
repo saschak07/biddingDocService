@@ -1,6 +1,5 @@
 package com.bidder.docservice.util;
 
-import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -14,9 +13,7 @@ import com.bidder.docservice.entity.ExperinceEntity;
 public class ContractorMapper extends ModelMapper{
 
 	public ContractorDetailsEntity getContractorEntity(ContractorDetails contractor) {
-		ContractorDetailsEntity entity = super.map(contractor, ContractorDetailsEntity.class);
-		entity.setContractorId(UUID.randomUUID().toString());
-		return entity;
+		return super.map(contractor, ContractorDetailsEntity.class);
 	}
 
 	public ContractorDetails getContractorDetails(ContractorDetailsEntity contractorDetailsEntity) {
