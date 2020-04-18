@@ -2,17 +2,19 @@ package com.bidder.docservice.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aspose.words.Document;
 import com.aspose.words.ReportingEngine;
-import com.aspose.words.SaveFormat;
+
 import com.bidder.docservice.entity.ContractorDetailsEntity;
 import com.bidder.docservice.entity.Contractor_File_status;
 import com.bidder.docservice.entity.TendererEntity;
@@ -33,6 +35,12 @@ public class DocEditorServiceImpl implements DocEditorService{
 
 	@Override
 	public void updateContractorWithFile(ContractorDetailsEntity contractor) {
+		
+		/*
+		 * ZDocGenerator obj = new ZDocGenerator();
+		 * obj.generateDocument("C:\\Users\\Desktop\\financeTemplate.docx",
+		 * "C:\\Users\\Desktop\\sourceData.json", "C:\\Users\\Desktop\\output.docx");
+		 */
 		try {
 				TendererEntity tendererData = tendererService.getFileByName(contractor.getBidding_for_client(), templateFilename);
 				storeFile(tendererData.getData(), templateFilename);
@@ -40,19 +48,14 @@ public class DocEditorServiceImpl implements DocEditorService{
 				ReportingEngine engine = new ReportingEngine();
 				engine.buildReport(doc, contractor,"c");
 				doc.save("result.docx");
-			/*
-			 * OutputStream os = new FileOutputStream(new File("template.docx"));
-			 * doc.save(os, SaveFormat.DOCX); byte[] data = new
-			 * byte[tendererData.getData().length+1024]; os.write(data); os.close();
-			 * contractor.setFileDate(data);
-			 * contractor.setStatus(Contractor_File_status.SUCCESS);
-			 * contractor.setFileName(contractor.getName()+generatedFileNameSuffix);
-			 * contractor.setFileType(tendererData.getFileType());
-			 * contractorService.updateContractorDetails(contractor);
-			 * log.info("updated bidding file for :"+contractor.getName());
-			 * storeFile(contractor.getFileDate(),"result.docx");
-			 */
-				
+				File file = new File("result.docx");
+				byte[] bytesArray = new byte[(int) file.length()];
+				FileInputStream fis = new FileInputStream(file);
+				fis.read(bytesArray); //read file into bytes[]
+				fis.close();
+				contractor.setFileDate(bytesArray);
+				contractor.setFileName(contractor.getName()+generatedFileNameSuffix);
+				contractor.setFileType(tendererData.getFileType());
 				contractor.setStatus(Contractor_File_status.SUCCESS);
 				contractorService.updateContractorDetails(contractor);
 				
@@ -64,6 +67,7 @@ public class DocEditorServiceImpl implements DocEditorService{
 		
 	}
 	
+	@Override
 	public void storeFile(byte[] data, String fileName) throws IOException {
 		File fileWrite = new File(fileName);
 		OutputStream os = new FileOutputStream(fileWrite);

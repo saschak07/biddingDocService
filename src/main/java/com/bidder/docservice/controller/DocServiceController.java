@@ -19,9 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.bidder.docservice.dao.ContractorsDao;
 import com.bidder.docservice.dto.ContractorDetails;
+import com.bidder.docservice.entity.ContractorDetailsEntity;
 import com.bidder.docservice.entity.TendererEntity;
+import com.bidder.docservice.repository.ContractorRepository;
 import com.bidder.docservice.service.ContractorService;
+import com.bidder.docservice.service.DocMergeService;
 import com.bidder.docservice.service.TendererService;
 
 
@@ -33,6 +37,10 @@ public class DocServiceController {
 	private ContractorService contractorService;
 	@Autowired
 	private TendererService tendererService;
+	@Autowired
+	private ContractorsDao contractorsDao;
+	@Autowired
+	private DocMergeService docMergeService;
 	
 	@PostMapping("/contractor")
 	@CrossOrigin
@@ -64,5 +72,21 @@ public class DocServiceController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + tendererEntity.getFileName() + "\"")
                 .body(new ByteArrayResource(tendererEntity.getData()));
 	}
+	
+	@GetMapping("/contractor/getFile/{name}")
+	@CrossOrigin
+	public ResponseEntity<ByteArrayResource> getFileByName(@PathVariable("name") String name){
+		ContractorDetailsEntity contractor = contractorsDao.getContractorByName(name);
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contractor.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + contractor.getFileName() + "\"")
+                .body(new ByteArrayResource(contractor.getFileDate()));
+	}
+
+	@PostMapping("/contractor/uploadFile/{name}")
+	@CrossOrigin
+    public ResponseEntity<Object> mergeFiletoContractor(@RequestParam("file") MultipartFile file , @PathVariable String name) throws IOException {
+		docMergeService.processMerging(file,name);
+       return ResponseEntity.ok(null);
+    }
 
 }

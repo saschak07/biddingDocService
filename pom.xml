@@ -24,18 +24,26 @@
 		    <name>Aspose Java API</name>
 		    <url>https://repository.aspose.com/repo/</url>
 		</repository>
+		<repository>
+			<id>com.e-iceblue</id>
+			<name>e-iceblue</name>
+			<url>http://repo.e-iceblue.com/nexus/content/groups/public/</url>
+		</repository>
 	</repositories>
 	
-	
-	
-
 	<dependencies>
-	<dependency>
-	    <groupId>com.aspose</groupId>
-	    <artifactId>aspose-words</artifactId>
-	    <version>20.1</version>
-	    <type>pom</type>
-	</dependency>
+		<dependency>
+		    <groupId>com.aspose</groupId>
+		    <artifactId>aspose-words</artifactId>
+		    <version>20.1</version>
+		    <type>pom</type>
+		</dependency>
+		<dependency>
+		    <groupId>e-iceblue</groupId>
+		    <artifactId>spire.doc</artifactId>
+		    <version>3.4.3</version>
+		</dependency>
+	
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
