@@ -8,18 +8,24 @@ import java.io.OutputStream;*/
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bidder.docservice.entity.TendererEntity;
+import com.bidder.docservice.exceptions.FileNotStoredException;
 import com.bidder.docservice.repository.TendererRepository;
 import com.bidder.docservice.util.TendererMapper;
+
+import lombok.extern.slf4j.Slf4j;
 //import com.zeonpad.docgenerator.ZDocGenerator;
 @Service
+@Slf4j
 public class TendererServiceImpl implements TendererService {
 	
 	@Autowired
@@ -29,22 +35,24 @@ public class TendererServiceImpl implements TendererService {
 
 	@Override
 	@Transactional
-	public void storeFile(MultipartFile file,String tendererName) throws IOException {
-		//try{
+	public void storeFile(MultipartFile file,String tendererName) throws Exception {
+		try{
 			TendererEntity tenderEntity = mapper.getTenDererEntity(file,tendererName);
+			
+			Optional<TendererEntity> storedTenderer = tendererRepo.findByName(tendererName);
+			if(storedTenderer.isPresent()) {
+				storedTenderer.get().setData(file.getBytes());
+				storedTenderer.get().setFileName(StringUtils.cleanPath(file.getOriginalFilename()));
+				storedTenderer.get().setFileType(file.getContentType());
+				return;
+			}
 		
 		tendererRepo.save(tenderEntity);
-		/*File fileWrite = new File("sample.docx");
-		OutputStream os = new FileOutputStream(fileWrite);
-		os.write(tenderEntity.getData());
-		os.close();
-		
 		}catch(Exception e) {
-			e.printStackTrace();
-		}*/
+			log.error("could not save file for tenderer:"+tendererName);
+			throw new FileNotStoredException("file could not be Stored");
+		}
 		
-		//ZDocGenerator obj = new ZDocGenerator();
-		//obj.generateDocument("/resources/utils/Field Elements.docx", "/resources/utils/sourceData.json", "/resources/utils/Field Elements_Output.docx");
 		
 	}
 

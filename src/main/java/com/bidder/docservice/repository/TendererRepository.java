@@ -1,6 +1,7 @@
 package com.bidder.docservice.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -15,5 +16,7 @@ public interface TendererRepository extends CrudRepository<TendererEntity, Strin
 
 	@Query("select t from TendererEntity t where t.name = :tenderer and t.fileName = :fileName")
 	TendererEntity getAllFileName(@Param("tenderer")String tenderer,@Param("fileName") String fileName);
+
+	Optional<TendererEntity> findByName(String tendererName);
 
 }

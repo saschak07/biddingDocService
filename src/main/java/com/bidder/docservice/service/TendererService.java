@@ -9,7 +9,7 @@ import com.bidder.docservice.entity.TendererEntity;
 
 public interface TendererService {
 
-	void storeFile(MultipartFile file, String tenderer) throws IOException;
+	void storeFile(MultipartFile file, String tenderer) throws Exception;
 
 	List<String> getAllFileNames(String tenderer);
 

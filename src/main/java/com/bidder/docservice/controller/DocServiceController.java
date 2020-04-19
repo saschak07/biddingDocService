@@ -55,7 +55,7 @@ public class DocServiceController {
 	}
 	@PostMapping("/tenderer/uploadFile/{tenderer}")
 	@CrossOrigin
-    public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file , @PathVariable String tenderer) throws IOException {
+    public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file , @PathVariable String tenderer) throws Exception {
 		tendererService.storeFile(file,tenderer);
        return ResponseEntity.ok(null);
     }
