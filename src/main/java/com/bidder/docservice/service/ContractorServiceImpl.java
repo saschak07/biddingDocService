@@ -38,10 +38,12 @@ public class ContractorServiceImpl implements ContractorService{
 		
 	}
 	@Override
+	@Transactional
 	public ContractorDetails getContractorByName(String contractorName) {
 		return mapper.getContractorDetails(contractorRepo.findByName(contractorName).get());
 	}
 	@Override
+	@Transactional
 	public List<ContractorDetailsEntity> getAllContractorsByStatus(Contractor_File_status status) {
 		return contractorRepo.getAllContractorsByStatus(status);
 	}
