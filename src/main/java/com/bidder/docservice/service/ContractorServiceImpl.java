@@ -1,5 +1,6 @@
 package com.bidder.docservice.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.bidder.docservice.dto.ContractorDetails;
 import com.bidder.docservice.entity.ContractorDetailsEntity;
+import com.bidder.docservice.entity.Contractor_File_status;
 import com.bidder.docservice.repository.ContractorRepository;
 import com.bidder.docservice.util.ContractorMapper;
 
@@ -29,14 +31,28 @@ public class ContractorServiceImpl implements ContractorService{
 			optionalContractor.get().setBidding_for_client(contractor.getBidding_for_client());
 			optionalContractor.get().setExperince(mapper.getExperince(contractor.getExperince()));
 			optionalContractor.get().setName(contractor.getName());
+			optionalContractor.get().setStatus(Contractor_File_status.PENDING);
 			return;
 		}
 		contractorRepo.save(mapper.getContractorEntity(contractor));
 		
 	}
 	@Override
+	@Transactional
 	public ContractorDetails getContractorByName(String contractorName) {
 		return mapper.getContractorDetails(contractorRepo.findByName(contractorName).get());
 	}
+	@Override
+	@Transactional
+	public List<ContractorDetailsEntity> getAllContractorsByStatus(Contractor_File_status status) {
+		return contractorRepo.getAllContractorsByStatus(status);
+	}
+	@Override
+	public void updateContractorDetails(ContractorDetailsEntity contractor) {
+		contractorRepo.save(contractor);
+		
+	}
+	
+	
 
 }

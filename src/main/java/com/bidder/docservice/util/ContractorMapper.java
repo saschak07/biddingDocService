@@ -1,6 +1,5 @@
 package com.bidder.docservice.util;
 
-import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -8,15 +7,16 @@ import org.springframework.stereotype.Component;
 import com.bidder.docservice.dto.ContractorDetails;
 import com.bidder.docservice.dto.PastExperince;
 import com.bidder.docservice.entity.ContractorDetailsEntity;
+import com.bidder.docservice.entity.Contractor_File_status;
 import com.bidder.docservice.entity.ExperinceEntity;
 
 @Component
 public class ContractorMapper extends ModelMapper{
 
 	public ContractorDetailsEntity getContractorEntity(ContractorDetails contractor) {
-		ContractorDetailsEntity entity = super.map(contractor, ContractorDetailsEntity.class);
-		entity.setContractorId(UUID.randomUUID().toString());
-		return entity;
+		ContractorDetailsEntity contractorEntity = super.map(contractor, ContractorDetailsEntity.class);
+		contractorEntity.setStatus(Contractor_File_status.PENDING);
+		return contractorEntity;
 	}
 
 	public ContractorDetails getContractorDetails(ContractorDetailsEntity contractorDetailsEntity) {

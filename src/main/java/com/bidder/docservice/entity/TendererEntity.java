@@ -1,9 +1,7 @@
 package com.bidder.docservice.entity;
 
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
@@ -15,30 +13,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
-@Table(name="contractors")
-@Setter
+@Table(name="Tenderer")
 @Getter
+@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ContractorDetailsEntity {
 
-	@Id
+@AllArgsConstructor
+@NoArgsConstructor
+public class TendererEntity {
+	@javax.persistence.Id
 	@GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-	private String contractorId;
+	private String Id;
 	private String name;
-	private String address;
-	private String bidding_for_client;
-	@Embedded
-	private ExperinceEntity experince;
-	private Boolean accepted_Terms;
-	@Lob
-	private byte[] fileDate;
 	private String fileName;
-	private String fileType;
-	private Contractor_File_status status;
+
+    private String fileType;
+
+    @Lob
+    private byte[] data;
 	
+
 }
