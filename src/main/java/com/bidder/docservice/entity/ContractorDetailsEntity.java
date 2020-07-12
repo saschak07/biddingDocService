@@ -31,6 +31,7 @@ public class ContractorDetailsEntity {
 	private String contractorId;
 	private String name;
 	private String address;
+	private String emailId;
 	private String bidding_for_client;
 	@Embedded
 	private ExperinceEntity experince;

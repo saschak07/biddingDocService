@@ -15,9 +15,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContractorDetails {
+	private String contractorId;
 	private String name;
 	private String bidding_for_client;
 	private String address;
+	private String emailId;
 	private PastExperince experince;
 	private Boolean accepted_Terms;
 

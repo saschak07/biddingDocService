@@ -36,11 +36,6 @@ public class DocEditorServiceImpl implements DocEditorService{
 	@Override
 	public void updateContractorWithFile(ContractorDetailsEntity contractor) {
 		
-		/*
-		 * ZDocGenerator obj = new ZDocGenerator();
-		 * obj.generateDocument("C:\\Users\\Desktop\\financeTemplate.docx",
-		 * "C:\\Users\\Desktop\\sourceData.json", "C:\\Users\\Desktop\\output.docx");
-		 */
 		try {
 				TendererEntity tendererData = tendererService.getFileByName(contractor.getBidding_for_client(), templateFilename);
 				storeFile(tendererData.getData(), templateFilename);

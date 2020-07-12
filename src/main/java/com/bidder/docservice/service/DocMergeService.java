@@ -4,6 +4,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface DocMergeService {
 
-	void processMerging(MultipartFile file, String name);
+	void processMerging(MultipartFile file, String contracorId);
 
 }

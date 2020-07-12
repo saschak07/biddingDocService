@@ -29,10 +29,10 @@ public class DocMergeServiceImpl implements DocMergeService{
 	private ContractorsDao contractorDao;
 
 	@Override
-	public void processMerging(MultipartFile file, String name) {
+	public void processMerging(MultipartFile file, String contracorId) {
 		try {
 			editorService.storeFile(file.getBytes(), "merge1.docx");
-			ContractorDetailsEntity contractor = contractorDao.getContractorByName(name);
+			ContractorDetailsEntity contractor = contractorDao.findByContractorId(contracorId);
 			editorService.storeFile(contractor.getFileDate(), "merge2.docx");
 			Document doc = new Document("merge2.docx");
 			doc.insertTextFromFile("merge1.docx", FileFormat.Docx_2013);

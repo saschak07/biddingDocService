@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,15 +45,29 @@ public class DocServiceController {
 	
 	@PostMapping("/contractor")
 	@CrossOrigin
-	public ResponseEntity<Object> createContractorDoc(@RequestBody ContractorDetails contractor){
-		contractorService.saveContractorDetails(contractor);
-		return ResponseEntity.ok(null);
+	public ResponseEntity<ContractorDetails> createContractorDoc(@RequestBody ContractorDetails contractor){
+		ContractorDetails contractorDetails = contractorService.saveContractorDetails(contractor);
+		return ResponseEntity.ok(contractorDetails);
 		}
-	@GetMapping("/contractor/{contractorName}")
+	@GetMapping("/contractor/{contractorId}")
 	@CrossOrigin
-	public ResponseEntity<ContractorDetails> getContractor(@PathVariable String contractorName ){
-		return ResponseEntity.ok(contractorService.getContractorByName(contractorName));
+	public ResponseEntity<ContractorDetails> getContractor(@PathVariable String contractorId ){
+		return ResponseEntity.ok(contractorService.getContractorById(contractorId));
 	}
+	
+	@GetMapping("/contractors")
+	@CrossOrigin
+	public ResponseEntity<List<ContractorDetails>> getAllContractors(){
+		return ResponseEntity.ok(contractorService.getAllContracors());
+	}
+	
+	@DeleteMapping("/contractors/{contractorId}")
+	@CrossOrigin
+	public ResponseEntity<Object> removeContractor(@PathVariable String contractorId){
+		contractorService.removeContractor(contractorId);
+		return ResponseEntity.ok(null);
+	}
+	
 	@PostMapping("/tenderer/uploadFile/{tenderer}")
 	@CrossOrigin
     public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file , @PathVariable String tenderer) throws Exception {
@@ -73,19 +88,19 @@ public class DocServiceController {
                 .body(new ByteArrayResource(tendererEntity.getData()));
 	}
 	
-	@GetMapping("/contractor/getFile/{name}")
+	@GetMapping("/contractor/getFile/{contracorId}")
 	@CrossOrigin
-	public ResponseEntity<ByteArrayResource> getFileByName(@PathVariable("name") String name){
-		ContractorDetailsEntity contractor = contractorsDao.getContractorByName(name);
+	public ResponseEntity<ByteArrayResource> getFileByName(@PathVariable String contracorId){
+		ContractorDetailsEntity contractor = contractorsDao.findByContractorId(contracorId);
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contractor.getFileType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + contractor.getFileName() + "\"")
                 .body(new ByteArrayResource(contractor.getFileDate()));
 	}
 
-	@PostMapping("/contractor/uploadFile/{name}")
+	@PostMapping("/contractor/uploadFile/{contracorId}")
 	@CrossOrigin
-    public ResponseEntity<Object> mergeFiletoContractor(@RequestParam("file") MultipartFile file , @PathVariable String name) throws IOException {
-		docMergeService.processMerging(file,name);
+    public ResponseEntity<Object> mergeFiletoContractor(@RequestParam("file") MultipartFile file , @PathVariable String contracorId) throws IOException {
+		docMergeService.processMerging(file,contracorId);
        return ResponseEntity.ok(null);
     }
 
